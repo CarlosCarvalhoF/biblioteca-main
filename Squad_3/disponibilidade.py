@@ -1,4 +1,4 @@
-#Henrique
+#Henrique e Gabriel
 
 # =============================================================================
 # MÓDULO: VALIDAÇÃO DE DISPONIBILIDADE
