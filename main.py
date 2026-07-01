@@ -1,4 +1,4 @@
-from modules.livros import (
+from modules.gerenciadorLivros import (
     cadastrar_livro,
     listar_livros,
     buscar_livro
