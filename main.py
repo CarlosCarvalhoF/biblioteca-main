@@ -10,7 +10,7 @@ from modules.usuarios import (
     buscar_aluno
 )
 
-from modules.emprestimos import realizar_emprestimo
+from modules.realizar_emprestimos import realizar_emprestimo
 from modules.devolucoes import devolver_livro
 from modules.historico import listar_historico
 from modules.relatorios import menu_relatorios
