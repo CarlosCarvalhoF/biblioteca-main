@@ -43,10 +43,3 @@ def realizar_emprestimo():
         print('Empréstimo realizado com sucesso!')
     else:
         print('Livro indisponível para empréstimo!')
-
-
-#Testando posteriormente
-usuarios.cadastrar_aluno()
-gerenciadorLivros.cadastrar_livro()
-realizar_emprestimo()
-realizar_emprestimo()
