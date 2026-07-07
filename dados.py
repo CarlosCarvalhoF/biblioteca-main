@@ -1,0 +1,4 @@
+livros = []
+alunos = []
+emprestimos = []
+historico = []
