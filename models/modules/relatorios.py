@@ -1,7 +1,7 @@
 from collections import Counter
 
 from models.modules.gerenciadorLivros import Livro, listar_livros
-from models.usuarios import listar_alunos, Aluno
+from models.modules.usuarios import listar_alunos, Aluno
 
  
 class RelatorioBiblioteca:
