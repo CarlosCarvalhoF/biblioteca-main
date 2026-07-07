@@ -1,18 +1,5 @@
-class Aluno: #Classe aluno
-    def __init__(self, matricula, nome, turma, cpf, nome_mae, telefone, emprestimos_ativos, total_emprestimos): # Metodo construtos e parâmetros
-        self.matricula = matricula
-        self.nome = nome
-        self.turma = turma
-        self.cpf = cpf
-        self.nome_mae = nome_mae
-        self.telefone = telefone
-
-        self.emprestimos_ativos = emprestimos_ativos
-        self.total_emprestimos = total_emprestimos
-    def exibir_aluno(self): # Metodo de exibição do objeto
-        print(f'''
-Nome: {self.nome} | CPF: {self.cpf} | Nome da mãe: {self.nome_mae}
-Matrícula: {self.matricula} | Turma: {self.turma} | Telefone: {self.telefone}''')
+from usuarios import Aluno
+from dados import alunos
 
 def validar_cpf(cpf, lista):
     if len(cpf) != 11 or not cpf.isdigit():
@@ -35,7 +22,7 @@ def cadastrar_aluno(): # Função para cadastro de novos alunos
     print("--- CADASTRO DE ALUNO ---")
     
     matricula = (input('Digite a matrícula: ')).strip() # Solicitação de informação
-    while validar_matricula(matricula, lista_alunos) is None: # Validação da informação, enquanto inválida continuará solicitando
+    while validar_matricula(matricula, alunos) is None: # Validação da informação, enquanto inválida continuará solicitando
         matricula = (input('Digite nova matrícula: ')).strip()
     
     nome = input('Digite o nome do aluno: ').strip() # Solicita o nome
@@ -47,7 +34,7 @@ def cadastrar_aluno(): # Função para cadastro de novos alunos
         turma = input('Turma não pode estar em branco: ').strip()
 
     cpf = input('Digite o CPF: ') # Solicitação de informação
-    while validar_cpf(cpf, lista_alunos) is None: # Validação da informação, enquanto inválida continuará solicitando
+    while validar_cpf(cpf, alunos) is None: # Validação da informação, enquanto inválida continuará solicitando
         cpf = (input('Digite o cpf com 11 digitos: ')).strip() 
     
     nome_mae = input('Digite o nome da mãe: ')
@@ -60,7 +47,7 @@ def cadastrar_aluno(): # Função para cadastro de novos alunos
 
     aluno = Aluno(matricula, nome, turma, cpf, nome_mae, telefone, emprestimos_ativos = 0, total_emprestimos = 0) # Cria o Objeto Aluno com as informações soliciatadas 
     
-    lista_alunos.append(aluno) # Salva o objeto Aluno na lista de alunos
+    alunos.append(aluno) # Salva o objeto Aluno na lista de alunos
     print('Aluno cadastrado com SUCESSO!\n')
 
 def listar_alunos(lista): # Função para listar Alunos
@@ -78,17 +65,3 @@ def buscar_aluno(matricula, lista): #Busca um Aluno com base na matrícula
             return aluno #Retorna o objeto Aluno
     return None # Se não encontrar nada, retorna vazio
 
-
-lista_alunos = []
-
-cadastrar_aluno()
-cadastrar_aluno()
-
-listar_alunos(lista_alunos)
-
-matricula = (input('Digite a matricula: '))
-aluno = buscar_aluno(matricula, lista_alunos)
-if aluno is not None:
-    aluno.exibir_aluno()
-else:
-    print("Aluno não encontrado")
