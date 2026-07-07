@@ -1,105 +1,69 @@
-<<<<<<< HEAD:modules/relatorios.py
-from collections import Counter
-
-from models.modules.gerenciadorLivros import Livro, listar_livros
-from models.usuarios import listar_alunos, Aluno
-
+from modules.gerenciadorLivros import listar_livros
+from usuarios import listar_alunos
+from modules.usuarios import Aluno
  
-class RelatorioBiblioteca:
-    def __init__(self, livros: list[listar_livros], alunos: list[listar_alunos], emprestimos: list[listar_livros]):
-        self.livros = livros
-        self.usuarios = alunos
-        self.emprestimos = emprestimos
+class Relatorio:
+    def __init__(self, listar_livros, listar_alunos, realizar_emprestimo):
+        self.listar_livros = listar_livros
+        self.listar_alunos = listar_alunos
+        self.realizar_emprestimo = realizar_emprestimo
  
-    # Livros disponíveis
     def livros_disponiveis(self):
-        return [Livro for Livro in self.livros if Livro.disponivel]
+        livros_disponiveis = [livro for livro in self.listar_livros() if livro.disponivel]
+        if not livros_disponiveis:
+            print("Nenhum livro disponível no momento.")
+            return
+        return livros_disponiveis
  
-    # Livros emprestados
     def livros_emprestados(self):
-        return [Livro for Livro in self.livros if not Livro.disponivel]
+        livros_emprestados = [livro for livro in self.listar_livros() if not livro.disponivel]
+        if not livros_emprestados:
+            print("Nenhum livro emprestado no momento.")
+            return
+        return livros_emprestados
  
-    # Ranking de usuários
-    def ranking_alunos(self, top_n: int = None):
-        contagem = Counter(e.listar_alunos_id for e in self.emprestimos)
-        ranking = []
-        for listar_alunos in self.usuarios:
-            qtd = contagem.get(listar_alunos.id, 0)
-            ranking.append((listar_alunos, qtd))
-        ranking.sort(key=lambda par: par[1], reverse=True)
-        return ranking[:top_n] if top_n else ranking
+       
+    def ranking_alunos(self):
+        listar_alunos = sorted(
+            self.listar_alunos(),
+            key=lambda aluno: aluno.total_emprestimos,
+            reverse=True
+        )
+        if not listar_alunos:
+            print("Nenhum aluno cadastrado no momento.")
+            return
+        return listar_alunos
+   
+def menu_relatorios():
+    relatorio = Relatorio(listar_livros, listar_alunos, None)
+    while True:
+        print("\n--- Menu de Relatórios ---")
+        print("1. Livros Disponíveis")
+        print("2. Livros Emprestados")
+        print("3. Ranking de Alunos")
+        print("4. Voltar ao Menu Principal")
+        opcao = input("Escolha uma opção: ")
  
-    # saída formatada
-    def gerar_relatorio_completo(self):
-        linhas = []
-        linhas.append("=" * 45)
-        linhas.append("RELATÓRIO DA BIBLIOTECA")
-        linhas.append("=" * 45)
+        if opcao == "1":
+            livros_disponiveis = relatorio.livros_disponiveis()
+            if livros_disponiveis:
+                print("\n--- Livros Disponíveis ---")
+                for livro in livros_disponiveis:
+                    print(f"Título: {livro.titulo}, Autor: {livro.autor}, Ano: {livro.ano}")
+        elif opcao == "2":
+            livros_emprestados = relatorio.livros_emprestados()
+            if livros_emprestados:
+                print("\n--- Livros Emprestados ---")
+                for livro in livros_emprestados:
+                    print(f"Título: {livro.titulo}, Autor: {livro.autor}, Ano: {livro.ano}")
+        elif opcao == "3":
+            ranking_alunos = relatorio.ranking_alunos()
+            if ranking_alunos:
+                print("\n--- Ranking de Alunos ---")
+                for aluno in ranking_alunos:
+                    print(f"Nome: {aluno.nome}, Total de Empréstimos: {aluno.total_emprestimos}")
+        elif opcao == "4":
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
  
-        linhas.append(f"\n LIVROS DISPONÍVEIS ({len(self.livros_disponiveis())})")
-        for livro in self.livros_disponiveis():
-            linhas.append(f"  - {livro.titulo} ({livro.autor})")
- 
-        linhas.append(f"\n LIVROS EMPRESTADOS ({len(self.livros_emprestados())})")
-        for livro in self.livros_emprestados():
-            linhas.append(f"  - {livro.titulo} ({livro.autor})")
- 
-        linhas.append("\n RANKING DE USUÁRIOS")
-        for posicao, (listar_alunos, qtd) in enumerate(self.ranking_alunos(), start=1):
-            linhas.append(f"  {posicao}º - {listar_alunos.nome}: {qtd} empréstimo(s)")
- 
-        linhas.append("=" * 45)
-        return "\n".join(linhas)
-=======
-from collections import Counter
-
-from models.modules.gerenciadorLivros import Livro, listar_livros
-from models.modules.usuarios import listar_alunos, Aluno
-
- 
-class RelatorioBiblioteca:
-    def __init__(self, livros: list[listar_livros], alunos: list[listar_alunos], emprestimos: list[listar_livros]):
-        self.livros = livros
-        self.usuarios = alunos
-        self.emprestimos = emprestimos
- 
-    # Livros disponíveis
-    def livros_disponiveis(self):
-        return [Livro for Livro in self.livros if Livro.disponivel]
- 
-    # Livros emprestados
-    def livros_emprestados(self):
-        return [Livro for Livro in self.livros if not Livro.disponivel]
- 
-    # Ranking de usuários
-    def ranking_alunos(self, top_n: int = None):
-        contagem = Counter(e.listar_alunos_id for e in self.emprestimos)
-        ranking = []
-        for listar_alunos in self.usuarios:
-            qtd = contagem.get(listar_alunos.id, 0)
-            ranking.append((listar_alunos, qtd))
-        ranking.sort(key=lambda par: par[1], reverse=True)
-        return ranking[:top_n] if top_n else ranking
- 
-    # saída formatada
-    def gerar_relatorio_completo(self):
-        linhas = []
-        linhas.append("=" * 45)
-        linhas.append("RELATÓRIO DA BIBLIOTECA")
-        linhas.append("=" * 45)
- 
-        linhas.append(f"\n LIVROS DISPONÍVEIS ({len(self.livros_disponiveis())})")
-        for livro in self.livros_disponiveis():
-            linhas.append(f"  - {livro.titulo} ({livro.autor})")
- 
-        linhas.append(f"\n LIVROS EMPRESTADOS ({len(self.livros_emprestados())})")
-        for livro in self.livros_emprestados():
-            linhas.append(f"  - {livro.titulo} ({livro.autor})")
- 
-        linhas.append("\n RANKING DE USUÁRIOS")
-        for posicao, (listar_alunos, qtd) in enumerate(self.ranking_alunos(), start=1):
-            linhas.append(f"  {posicao}º - {listar_alunos.nome}: {qtd} empréstimo(s)")
- 
-        linhas.append("=" * 45)
-        return "\n".join(linhas)
->>>>>>> 65c4611326c580f66b5df23cedf365df29085c3f:models/modules/relatorios.py
